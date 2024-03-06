@@ -2,7 +2,7 @@
 // @id           auto-next-on-takeout-for-autodarts@https://github.com/sebudde/auto-next-on-takeout-for-autodarts
 // @name         Auto next on takeout for Autodarts
 // @namespace    https://github.com/sebudde/auto-next-on-takeout-for-autodarts
-// @version      0.0.2
+// @version      0.0.3
 // @description  Userscript for Autodarts to reset board and switch to next player if takeout stucks
 // @author       sebudde
 // @match        https://play.autodarts.io/matches/*
@@ -76,11 +76,11 @@
         {
           value: 'OFF'
         }, {
-          value: '5'
-        }, {
           value: '10'
         }, {
           value: '15'
+        }, {
+          value: '20'
         }, {
           value: '30'
         }];
