@@ -1,4 +1,3 @@
-# Autodarts Auto Next On Takeout
+# Auto next on takeout for Autodarts
 
-Userscript to provide a config page for [play.autodarts.io](https://play.autodarts.io).
-
+Userscript to reset board and switch to next player if takeout stucks on [play.autodarts.io](https://play.autodarts.io).
