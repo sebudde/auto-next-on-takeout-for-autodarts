@@ -2,10 +2,10 @@
 // @id           auto-next-on-takeout-for-autodarts@https://github.com/sebudde/auto-next-on-takeout-for-autodarts
 // @name         Auto next on takeout for Autodarts
 // @namespace    https://github.com/sebudde/auto-next-on-takeout-for-autodarts
-// @version      0.0.3
+// @version      0.1
 // @description  Userscript for Autodarts to reset board and switch to next player if takeout stucks
 // @author       sebudde
-// @match        https://play.autodarts.io/matches/*
+// @match        https://play.autodarts.io/*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=autodarts.io
 // @license      MIT
 // @downloadURL  https://github.com/sebudde/auto-next-on-takeout-for-autodarts/raw/main/auto-next-on-takeout-for-autodarts.user.js
@@ -40,28 +40,25 @@
 
       console.log('match ready!');
 
-      const matchMenuEl = document.querySelectorAll('.css-k008qs');
+      const matchMenuEl = document.getElementById('ad-ext-game-settings-extra');
 
       let matchMenuContainer;
 
-      if (matchMenuEl.length > 1) {
+      if (matchMenuEl.children[0].classList.contains('adp_match-menu-row')) {
         // Autodarts Plus is active
-        matchMenuContainer = matchMenuEl[1];
-        const flexEl = document.createElement('div');
-        flexEl.classList.add('css-17xejub');
-        matchMenuContainer.appendChild(flexEl);
+        matchMenuContainer = matchMenuEl.children[0];
 
       } else {
-        const matchMenuRow = document.createElement('div');
-        matchMenuRow.classList.add('css-k008qs');
-        matchMenuRow.style.marginTop = 'calc(var(--chakra-space-2) * -1 - 4px)';
-        matchMenuContainer = document.createElement('div');
-        matchMenuContainer.classList.add('css-a6m3v9');
-        matchMenuRow.appendChild(matchMenuContainer);
-        document.querySelector('.css-k008qs').after(matchMenuRow);
+        // const matchMenuRow = document.createElement('div');
+        // matchMenuRow.classList.add('css-k008qs');
+        // matchMenuRow.style.marginTop = 'calc(var(--chakra-space-2) * -1 - 4px)';
+        // matchMenuContainer = document.createElement('div');
+        // matchMenuContainer.classList.add('css-a6m3v9');
+        // matchMenuRow.appendChild(matchMenuContainer);
+        // document.querySelector('.css-k008qs').after(matchMenuRow);
       }
 
-      const counterContainer = document.querySelector('.css-oyptjf');
+      const turnContainerEl = document.getElementById('ad-ext-turn');
 
       let nextPlayerAfterTakeoutSec = (await GM.getValue('nextPlayerAfterTakeoutSec')) || 'OFF';
 
@@ -112,8 +109,11 @@
 
       let countdown;
 
-      const nextPlayerBtn = [...document.querySelectorAll('.css-7bjx6y button')].filter(el => el.textContent.includes('Next'))[0];
-      const resetBoardBtn = [...document.querySelectorAll('.css-1uodvt1 button')].filter(el => el.textContent.includes('Reset'))[0];
+      const playgroundEl = document.getElementById('ad-ext-turn').nextElementSibling;
+
+      const nextPlayerBtn = [...playgroundEl.querySelectorAll('button')].filter(el => el.textContent.includes('Next'))[0];
+      const boardMenuEl = document.getElementById('ad-ext-game-settings-extra').previousSibling;
+      const resetBoardBtn = [...boardMenuEl.querySelectorAll('button')].filter(el => el.textContent.includes('Reset'))[0];
       const timerEl = document.createElement('span');
 
       const resetCountdown = () => {
@@ -125,7 +125,7 @@
         resetCountdown();
       }, false);
 
-      [...counterContainer.querySelectorAll('.css-rzdgh7, .css-1chp9v4')].forEach((counterBtn) => {
+      [...turnContainerEl.querySelectorAll('.ad-ext-turn-throw')].forEach((counterBtn) => {
         counterBtn.addEventListener('click', (event) => {
           resetCountdown();
         }, false);
@@ -154,7 +154,7 @@
         });
       });
 
-    }, 100);
+    }, 500);
   };
 
   observeDOM(document.getElementById('root'), {}, function(mutationrecords) {
